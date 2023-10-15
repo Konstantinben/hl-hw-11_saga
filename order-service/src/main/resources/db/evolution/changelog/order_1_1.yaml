@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: order_1_1
+      author: kp
+      changes:
+        - tagDatabase:
+            tag: order_1_0
+        - sqlFile:
+            path: db/evolution/version/1.0/1_1_UP.sql

@@ -1,0 +1,83 @@
+server:
+  port: ${APP_PORT:8080}
+  shutdown: immediate
+  error.include-stacktrace: never
+springdoc:
+  show-actuator: true
+  swagger-ui.path: /api.html
+management:
+  endpoints:
+    web:
+      discovery:
+        enabled: false
+      exposure:
+        include: health,prometheus,info
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+#    web:
+#      server:
+#        request:
+#          autotime:
+#            percentiles: 0.50,0.95,0.99,0.999
+  endpoint.health:
+    cache.time-to-live: 100ms
+    probes.enabled: true
+    show-details: always
+    show-components: always
+logging:
+  appender: ${LOGGING_APPENDERS:stdout}
+  root:
+    level: DEBUG
+  level:
+    org.springframework.jdbc: DEBUG
+    otus.ms: DEBUG
+spring:
+  application:
+    name: hl-hw-11-billing
+  autoconfigure:
+    exclude[0]: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    exclude[1]: org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database: postgresql
+    properties:
+      hibernate:
+        generate_statistics: false
+      jdbc:
+        batch_size: 100
+      order_inserts: true
+      order_updates: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    jdbc-url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USER:postgres}
+    password: ${DB_PWD:pass}
+    driver-class-name: org.postgresql.Driver
+    # initialization-mode: always
+    hikari:
+      maximum-pool-size: ${DB_MAX_CONNECTIONS:100}
+      minimum-idle: ${DB_MIN_CONNECTIONS:3}
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/evolution/db.changelog-master.yaml
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    user: ${DB_USER:postgres}
+    password: ${DB_PWD:pass}
+
+app:
+  jwt:
+    secret: megaTopSecret
+    expiration: 100500000
+    header: Authorization
+  auth-service-uri: ${AUTH_SERVICE_URI:localhost:8087}
+  admin-user-email: admin@mshw.com
+  admin-user-uuid: 50109079-8dec-4847-868e-717c77deb881

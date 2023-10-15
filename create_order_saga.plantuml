@@ -1,0 +1,55 @@
+@startuml
+actor User as user
+participant nginx
+participant "order\nservice" as orders
+participant "billing\nservice" as billing
+participant "delivery\nservice" as delivery
+
+== Создание заказа ==
+user -> nginx : PUT orders/order
+nginx -> orders: PUT /order
+group #cornsilk create order transaction
+orders -> orders: проверяем наличие товаров на складе
+orders -> orders: создание заказа
+orders -> billing: PUT /order/ - создание оплаты заказа
+billing -> billing: проверка средств на счете
+alt #LightBlue средств достаточно
+billing -> billing: cохранение оплаты в БД, paid=true
+billing -> billing: снятие средств со счета
+billing --> orders : оплата создана
+else #Pink средств недостаточно или не создан счет
+billing --> orders : оплата не создана
+end alt
+orders -> delivery: PUT / - оформление доставки
+delivery -> delivery: проверка, свободен ли слот на дату/время
+alt #LightBlue слот свободен
+delivery -> delivery: сохранение доставки в БД, confirmed=true
+delivery --> orders : доставка оформлена
+else #Pink слот занят
+delivery --> orders : доставка не оформлена
+end alt
+
+alt #LightBlue Оплата создана и Доставка оформлена
+orders -> orders: сохранение заказа в БД
+orders -> orders: удаление товаров заказа из списка товаров на складе
+orders --> user : Заказ успешно оформлен (confirmed=true)
+
+else #Pink Оплата не создана ИЛИ (И) Доставка не оформлена
+orders --> delivery : DELETE / - откат доставки
+delivery -> delivery : проверка, существует ли запись
+alt запись существует
+delivery -> delivery : DB update: confirmed=false - обновление записи
+end alt
+delivery --> orders : rollback complete
+orders -> billing: DELETE /order/ - откат оплаты
+billing -> billing: проверка, существует ли запись
+alt запись существует
+billing -> billing : DB update: возвращение средств на счет
+billing -> billing : DB update: paid=false - обновление записи
+end alt
+billing --> orders : rollback complete
+orders --> user : Ошибка создания заказа (confirmed=false))
+end alt
+end group
+
+@enduml

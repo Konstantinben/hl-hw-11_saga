@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: db/evolution/changelog/billing_1_0.yaml

@@ -1,0 +1,1760 @@
+{
+	"info": {
+		"_postman_id": "3f90f6f0-8567-4bb8-b2fa-fca218824387",
+		"name": "hl-hw-11_saga localhost:80",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5562917"
+	},
+	"item": [
+		{
+			"name": "/auth/signup - Регистрация пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData= pm.response.json();\r",
+							"console.log(\"accountId is \" + jsonData.accountId);\r",
+							"if(typeof jsonData.accountId !== \"undefined\") {\r",
+							"pm.collectionVariables.set(\"accountId\", jsonData.accountId);\r",
+							"}\r",
+							"\r",
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"  let rand1 = Math.random() * 100000;\r",
+							"  rand1 = Math.floor(rand1);\r",
+							"  console.log('Index1' + rand1);\r",
+							"  pm.collectionVariables.set(\"index1\", rand1);\r",
+							"\r",
+							"  let rand2 = Math.random() * 100000;\r",
+							"  rand2 = Math.floor(rand2);\r",
+							"  console.log('Index2' + rand2);\r",
+							"  pm.collectionVariables.set(\"index2\", rand2);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"email\": \"new{{index1}}@new.ru\",\r\n        \"password\": \"new\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/auth/signup",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login - Вход пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData= pm.response.json();\r",
+							"console.log(\"token is \" + jsonData.token);\r",
+							"if(typeof jsonData.token !== \"undefined\") {\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"}\r",
+							"\r",
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"email\": \"new{{index1}}@new.ru\",\r\n        \"password\": \"new\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/auth/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/warehouse/items Наличие товаров на складе 1000/1000/1000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let eTagHeader = pm.response.headers.get('ETag');\r",
+							"console.log('Response ETag Header: ' + eTagHeader);\r",
+							"pm.collectionVariables.set(\"etag\", ''+eTagHeader);\r",
+							"console.log(pm.collectionVariables.get(\"etag\"));\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"item1Uuid\", ''+jsonResponseData.items[0].itemUuid);\r",
+							"pm.collectionVariables.set(\"item2Uuid\", ''+jsonResponseData.items[1].itemUuid);\r",
+							"pm.collectionVariables.set(\"item3Uuid\", ''+jsonResponseData.items[2].itemUuid);\r",
+							"console.log('Item 1 UUID: '+ pm.collectionVariables.get(\"item1Uuid\"));\r",
+							"console.log('Item 2 UUID: '+ pm.collectionVariables.get(\"item2Uuid\"));\r",
+							"console.log('Item 3 UUID: '+ pm.collectionVariables.get(\"item3Uuid\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/warehouse/items",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"warehouse",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/  X Создание Заказа - Откат, Нет денег",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"{{item1Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item2Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item3Uuid}}\",\r\n            \"quantity\": 10\r\n        }\r\n    ],\r\n    \"delivery\": {\r\n        \"deliveryDate\": \"2023-12-22\",\r\n        \"startTime\": \"08:00:00\",\r\n        \"endTime\": \"09:00:00\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ Заказ - не подтвержден",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"7981a5ad-d6c2-4f52-b821-6680b9f2c09c\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"c9ecb61a-0f70-427f-844a-9fa41e65391f\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"e558a3ac-e020-44c4-b6a2-90089285a344\",\r\n            \"quantity\": 10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delivery/ Доставка - откат, не подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/delivery/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"delivery",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - пусто",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log('Response: ' + pm.response.text())\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/order/ Оплата заказа - пусто",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log('Response: ' + pm.response.text())\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/charge Добавим 5000 на счет",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"balance\": 5000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/charge",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"charge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - 5000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ ОК Создание заказа - Успешно",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"{{item1Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item2Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item3Uuid}}\",\r\n            \"quantity\": 10\r\n        }\r\n    ],\r\n    \"delivery\": {\r\n        \"deliveryDate\": \"2023-12-22\",\r\n        \"startTime\": \"08:00:00\",\r\n        \"endTime\": \"09:00:00\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - 2400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ Заказ - подтвержден",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"7981a5ad-d6c2-4f52-b821-6680b9f2c09c\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"c9ecb61a-0f70-427f-844a-9fa41e65391f\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"e558a3ac-e020-44c4-b6a2-90089285a344\",\r\n            \"quantity\": 10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/order/ Оплата - подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delivery/ Доставка - подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/delivery/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"delivery",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/warehouse/items На складе товаров стало меньше 990/990/990",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let eTagHeader = pm.response.headers.get('ETag');\r",
+							"console.log('Response ETag Header: ' + eTagHeader);\r",
+							"pm.collectionVariables.set(\"etag\", ''+eTagHeader);\r",
+							"console.log(pm.collectionVariables.get(\"etag\"));\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"item1Uuid\", ''+jsonResponseData.items[0].itemUuid);\r",
+							"pm.collectionVariables.set(\"item2Uuid\", ''+jsonResponseData.items[1].itemUuid);\r",
+							"pm.collectionVariables.set(\"item3Uuid\", ''+jsonResponseData.items[2].itemUuid);\r",
+							"console.log('Item 1 UUID: '+ pm.collectionVariables.get(\"item1Uuid\"));\r",
+							"console.log('Item 2 UUID: '+ pm.collectionVariables.get(\"item2Uuid\"));\r",
+							"console.log('Item 3 UUID: '+ pm.collectionVariables.get(\"item3Uuid\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/warehouse/items",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"warehouse",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ X Создание Заказа - Откат, Нет денег, Занят слот доставки",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"{{item1Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item2Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item3Uuid}}\",\r\n            \"quantity\": 10\r\n        }\r\n    ],\r\n    \"delivery\": {\r\n        \"deliveryDate\": \"2023-12-22\",\r\n        \"startTime\": \"08:00:00\",\r\n        \"endTime\": \"09:00:00\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/charge Добавим 5000 на счет",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"balance\": 5000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/charge",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"charge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - 7400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ X Создание Заказа - Откат, Занят слот доставки",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"{{item1Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item2Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item3Uuid}}\",\r\n            \"quantity\": 10\r\n        }\r\n    ],\r\n    \"delivery\": {\r\n        \"deliveryDate\": \"2023-12-22\",\r\n        \"startTime\": \"08:00:00\",\r\n        \"endTime\": \"09:00:00\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/order/ Оплата заказа - откат, не подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ Заказ - не подтвержден",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"7981a5ad-d6c2-4f52-b821-6680b9f2c09c\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"c9ecb61a-0f70-427f-844a-9fa41e65391f\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"e558a3ac-e020-44c4-b6a2-90089285a344\",\r\n            \"quantity\": 10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delivery Доставка - пусто",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/delivery/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"delivery",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - 7400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/order/ ОК Создание заказа - Успешно (Новый слот)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"pm.collectionVariables.set(\"order1Uuid\", ''+jsonResponseData.orderUuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"{{item1Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item2Uuid}}\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"{{item3Uuid}}\",\r\n            \"quantity\": 10\r\n        }\r\n    ],\r\n    \"delivery\": {\r\n        \"deliveryDate\": \"2023-12-22\",\r\n        \"startTime\": \"09:01:00\",\r\n        \"endTime\": \"10:00:00\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/balance Баланс - 4800",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/balance",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders/order/ Заказ - подтвержден",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"itemUuid\": \"7981a5ad-d6c2-4f52-b821-6680b9f2c09c\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"c9ecb61a-0f70-427f-844a-9fa41e65391f\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"itemUuid\": \"e558a3ac-e020-44c4-b6a2-90089285a344\",\r\n            \"quantity\": 10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/billing/order/ Оплата - подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/billing/order/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"billing",
+						"order",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delivery Доставка - подтверждена",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (typeof pm.response !== \"undefined\") {\r",
+							"    let jsonResponseData= pm.response.json();\r",
+							"    console.log\r",
+							"    if (typeof jsonResponseData !== \"undefined\") {\r",
+							"        console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "If-Match",
+						"value": "{{etag}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/delivery/{{order1Uuid}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"delivery",
+						"{{order1Uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/warehouse/items На складе товаров стало меньше 980/980/980",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonRequestData= pm.request.body.raw;\r",
+							"console.log\r",
+							"console.log('Request: ' + jsonRequestData)\r",
+							"\r",
+							"let eTagHeader = pm.response.headers.get('ETag');\r",
+							"console.log('Response ETag Header: ' + eTagHeader);\r",
+							"pm.collectionVariables.set(\"etag\", eTagHeader);\r",
+							"\r",
+							"let jsonResponseData= pm.response.json();\r",
+							"console.log\r",
+							"console.log('Response: ' + JSON.stringify(jsonResponseData))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/orders/warehouse/items",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"warehouse",
+						"items"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accountId",
+			"value": "initial",
+			"type": "string"
+		},
+		{
+			"key": "index1",
+			"value": ""
+		},
+		{
+			"key": "index2",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "etag",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "item1Uuid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "item2Uuid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "item3Uuid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "order1Uuid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "localhost:80",
+			"type": "string"
+		}
+	]
+}

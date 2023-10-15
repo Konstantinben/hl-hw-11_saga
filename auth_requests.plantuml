@@ -1,0 +1,70 @@
+@startuml
+actor User as user
+participant "nginx\nIngress Controller" as nginx
+participant "app\nservice" as app
+participant "auth\nservice" as auth
+
+
+== Auth Service - Signup ==
+user -> nginx : POST auth/signup
+nginx -> auth : POST /singup
+alt #LightBlue account does not exist
+auth --> user : account uuid
+else #Pink account already exists
+auth --> user : error 400
+end alt
+== Auth Service - Login ==
+user -> nginx : POST auth/login
+nginx -> auth : POST /login
+alt #LightBlue credentials are correct
+auth --> user : jwt token
+else #Pink incorrect credentials
+auth --> user : error 403
+end alt
+
+
+== App Service - Get Profile ==
+user -> nginx : GET /{uuid} View Profile
+nginx -> app : GET /{uuid}
+group #cornsilk validation
+app -> app : validate JWT token
+app -> auth : GET /admin - get registered user
+alt #LightBlue user registered
+auth --> app : user
+else #Pink user not registered
+auth --> app : error 400
+end alt
+app -> app : validate is uuid belongs to user
+alt #LightBlue uuid validated
+else #Pink uuid belongs to another user
+app --> user : error 403
+end alt
+end group
+alt #LightBlue user registered
+app --> user : profile
+else #Pink account user not registered
+app --> user : error 401
+end alt
+== App Service - Store/Update Profile ==
+user -> nginx : PUT /{uuid} Update Profile
+nginx -> app : PUT /{uuid}
+group #cornsilk validation
+app -> app : validate JWT token
+app -> auth : GET /admin - get registered user
+alt #LightBlue user registered
+auth --> app : user
+else #Pink user not registered
+auth --> app : error 400
+end alt
+app -> app : validate is uuid belongs to user
+alt #LightBlue uuid validated
+else #Pink uuid belongs to another user
+app --> user : error 403
+end alt
+end group
+alt #LightBlue user registered
+app --> user : updated profile
+else #Pink account user not registered
+app --> user : error 401
+end alt
+@enduml
